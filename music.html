@@ -1,0 +1,1173 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wala Vibes | Music for Every Mood</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+:root {
+  --cream: #fbebc8;
+  --paper: #fff5df;
+  --ink: #24180f;
+  --red: #b83226;
+  --green: #07594d;
+  --gold: #efad18;
+  --muted: #705e4b;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+}
+
+button, input {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.topbar {
+  min-height: 70px;
+  padding: 12px 5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  background: #f8e9c3;
+  border-bottom: 1px solid #e3d1a8;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--ink);
+  text-decoration: none;
+  font: 700 25px 'Space Grotesk', sans-serif;
+}
+
+.brandmark {
+  background: var(--gold);
+  border: 2px solid var(--ink);
+  border-radius: 12px 12px 12px 3px;
+  padding: 5px 10px;
+  font-size: 22px;
+}
+
+nav {
+  display: flex;
+  gap: 22px;
+  align-items: center;
+}
+
+nav a {
+  color: var(--ink);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+nav a:hover {
+  color: var(--red);
+}
+
+.menu {
+  display: none;
+  background: transparent;
+  border: 0;
+  font-size: 27px;
+}
+
+main {
+  max-width: 1500px;
+  margin: auto;
+}
+
+.crumb {
+  padding: 22px 5%;
+  font-size: 14px;
+}
+
+.hero {
+  padding: 35px 5% 50px;
+  display: grid;
+  grid-template-columns: 1.2fr .8fr;
+  gap: 40px;
+  align-items: center;
+  background:
+    repeating-linear-gradient(
+      171deg,
+      transparent 0 34px,
+      rgba(7,89,77,.055) 35px 39px,
+      transparent 40px 56px
+    );
+}
+
+.eyebrow {
+  color: var(--red);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+}
+
+.hero h1 {
+  font: 700 clamp(42px, 5.4vw, 78px)/1.05
+        'Space Grotesk', sans-serif;
+  letter-spacing: -3px;
+  margin: 18px 0;
+}
+
+.hero p {
+  font-size: clamp(17px, 1.7vw, 22px);
+  line-height: 1.7;
+  margin-bottom: 22px;
+}
+
+.primary {
+  background: #080706;
+  color: white;
+  border: 0;
+  border-radius: 100px;
+  padding: 15px 23px;
+  font-weight: 800;
+}
+
+.primary:hover {
+  background: var(--green);
+}
+
+.stats {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  margin-top: 15px;
+}
+
+.hero-art {
+  min-height: 300px;
+  background: linear-gradient(135deg, #eaa72b, #f8df9c);
+  border: 5px solid var(--green);
+  border-radius: 30px;
+  box-shadow: 12px 12px 0 var(--red);
+  display: grid;
+  place-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.art-sun {
+  width: 180px;
+  height: 180px;
+  background: #f5c34b;
+  border-radius: 50%;
+  position: absolute;
+  top: 20px;
+  right: 25px;
+}
+
+.auto-illustration {
+  font-size: clamp(100px, 14vw, 190px);
+  z-index: 1;
+  filter: drop-shadow(6px 9px 0 #b83226);
+  transform: rotate(-7deg);
+}
+
+.art-label {
+  position: absolute;
+  bottom: 18px;
+  left: 15px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.room-panel {
+  margin: 0 5% 55px;
+  padding: 22px;
+  background: linear-gradient(120deg, #f2b51f, #f5d16d);
+  border: 3px solid var(--red);
+  border-radius: 24px;
+  display: grid;
+  grid-template-columns: 1.2fr .8fr;
+  gap: 20px;
+}
+
+.room-visual {
+  min-height: 250px;
+  padding: 25px;
+  border: 5px solid var(--green);
+  border-radius: 18px;
+  background: linear-gradient(140deg, #d9892b, #f7d88d);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.room-visual .emoji {
+  font-size: 60px;
+  margin-bottom: 10px;
+}
+
+.room-visual h3 {
+  font: 700 28px 'Space Grotesk', sans-serif;
+  margin-bottom: 10px;
+}
+
+.room-visual p {
+  line-height: 1.6;
+}
+
+.room-card {
+  padding: 25px;
+  background: var(--paper);
+  border: 1px solid #d8c49b;
+  border-radius: 20px;
+}
+
+.small-label {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.room-card h2 {
+  font: 700 27px 'Space Grotesk', sans-serif;
+  margin: 10px 0;
+}
+
+.room-card p {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.room-form {
+  display: flex;
+  gap: 8px;
+  margin: 20px 0 12px;
+}
+
+.room-form input {
+  width: 100%;
+  min-width: 0;
+  padding: 12px;
+  background: white;
+  border: 2px solid #d6c49e;
+  border-radius: 12px;
+}
+
+.green-btn {
+  background: var(--green);
+  color: white;
+  border: 0;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-weight: 800;
+}
+
+.room-status {
+  color: var(--green);
+  font-size: 13px;
+  font-weight: 700;
+  margin-top: 12px;
+  line-height: 1.5;
+}
+
+.section {
+  padding: 0 5% 55px;
+}
+
+.section h2 {
+  font: 700 clamp(29px, 3vw, 42px)
+        'Space Grotesk', sans-serif;
+  margin: 10px 0;
+  letter-spacing: -1px;
+}
+
+.section-head p {
+  color: var(--muted);
+}
+
+.mood-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin: 25px 0;
+}
+
+.chip {
+  padding: 9px 16px;
+  border: 1.5px solid #bca57c;
+  border-radius: 99px;
+  background: transparent;
+  font-weight: 700;
+}
+
+.chip.active,
+.chip:hover {
+  background: var(--ink);
+  color: white;
+  border-color: var(--ink);
+}
+
+.playlist-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.playlist {
+  overflow: hidden;
+  border: 2px solid var(--ink);
+  border-radius: 20px;
+  background: var(--paper);
+  transition: .2s;
+}
+
+.playlist:hover {
+  transform: translateY(-5px);
+  box-shadow: 6px 7px 0 var(--red);
+}
+
+.cover {
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.cover::before,
+.cover::after {
+  content: "";
+  position: absolute;
+  width: 210px;
+  height: 210px;
+  border: 2px solid rgba(36,24,15,.17);
+  border-radius: 50%;
+}
+
+.cover::after {
+  width: 145px;
+  height: 145px;
+}
+
+.cover-emoji {
+  font-size: 80px;
+  z-index: 1;
+  filter: drop-shadow(3px 4px 0 rgba(0,0,0,.14));
+}
+
+.diwali { background: #f2a51c; }
+.ghazal { background: #9ab3a0; }
+.punjabi { background: #ef9e75; }
+.talha { background: #b5a6d5; }
+.chill { background: #9cc7d1; }
+.romance { background: #edb8ba; }
+
+.tag {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 6px 9px;
+  background: var(--paper);
+  border-radius: 99px;
+  font-size: 10px;
+  font-weight: 800;
+  z-index: 2;
+}
+
+.playlist-info {
+  padding: 18px;
+}
+
+.playlist-info h3 {
+  font: 700 22px 'Space Grotesk', sans-serif;
+  margin-bottom: 8px;
+}
+
+.playlist-info p {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+  min-height: 42px;
+  margin-bottom: 15px;
+}
+
+.playlist-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.track-count {
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.play-btn {
+  width: 43px;
+  height: 43px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--ink);
+  color: white;
+  font-size: 17px;
+}
+
+.play-btn:hover {
+  background: var(--green);
+}
+
+.track-section {
+  margin: 0 5% 55px;
+  padding: 25px;
+  background: #f4d99d;
+  border: 2px solid var(--red);
+  border-radius: 24px;
+}
+
+.track-layout {
+  display: grid;
+  grid-template-columns: .75fr 1.25fr;
+  gap: 24px;
+}
+
+.now-playing {
+  min-height: 320px;
+  padding: 25px;
+  background: var(--green);
+  color: var(--paper);
+  border-radius: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.vinyl {
+  font-size: 85px;
+  text-align: center;
+  margin: 20px 0;
+}
+
+.now-playing h3 {
+  font: 700 27px 'Space Grotesk', sans-serif;
+  margin-bottom: 8px;
+}
+
+.now-playing p {
+  color: #d9e7d5;
+  line-height: 1.5;
+}
+
+.track-list {
+  padding: 22px;
+  background: var(--paper);
+  border-radius: 18px;
+}
+
+.track-list h3 {
+  font: 700 23px 'Space Grotesk', sans-serif;
+  margin: 10px 0;
+}
+
+.track {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 13px 4px;
+  border-bottom: 1px solid #e5d5b5;
+}
+
+.track:last-child {
+  border-bottom: 0;
+}
+
+.track-num {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.track-title {
+  flex: 1;
+  font-weight: 800;
+}
+
+.track-artist {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+.track a {
+  color: var(--green);
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.track a:hover {
+  text-decoration: underline;
+}
+
+.how {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 22px;
+}
+
+.step {
+  padding: 22px;
+  border: 1.5px dashed #b59d70;
+  border-radius: 18px;
+}
+
+.step .n {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  background: var(--gold);
+  border: 1px solid var(--ink);
+  border-radius: 12px;
+  font-weight: 900;
+}
+
+.step h3 {
+  font: 700 20px 'Space Grotesk', sans-serif;
+  margin: 15px 0 8px;
+}
+
+.step p {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+footer {
+  padding: 30px 5%;
+  background: var(--ink);
+  color: var(--paper);
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+footer span {
+  color: #d7c6a6;
+  font-size: 13px;
+}
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 22px;
+  transform: translateX(-50%);
+  background: var(--ink);
+  color: white;
+  padding: 14px 20px;
+  border-radius: 99px;
+  max-width: 90%;
+  text-align: center;
+  display: none;
+  z-index: 20;
+}
+
+.toast.show {
+  display: block;
+}
+
+@media (max-width: 950px) {
+  nav { gap: 12px; }
+  nav a { font-size: 12px; }
+  .playlist-grid { grid-template-columns: repeat(2, 1fr); }
+  .hero { grid-template-columns: 1fr .8fr; }
+}
+
+@media (max-width: 680px) {
+  .topbar { min-height: 62px; }
+  .brand { font-size: 21px; }
+  .menu { display: block; }
+
+  nav {
+    display: none;
+    position: absolute;
+    top: 62px;
+    left: 0;
+    right: 0;
+    padding: 20px 5%;
+    background: #f8e9c3;
+    border-bottom: 1px solid #e3d1a8;
+    flex-wrap: wrap;
+  }
+
+  nav.open { display: flex; }
+  .hero { grid-template-columns: 1fr; gap: 25px; }
+  .hero h1 { letter-spacing: -2px; }
+  .hero-art { min-height: 220px; }
+  .auto-illustration { font-size: 130px; }
+  .room-panel { grid-template-columns: 1fr; padding: 12px; }
+  .playlist-grid { gap: 12px; }
+  .cover { height: 145px; }
+  .cover-emoji { font-size: 58px; }
+  .playlist-info { padding: 13px; }
+  .playlist-info h3 { font-size: 17px; }
+  .playlist-info p { font-size: 12px; }
+  .track-section { padding: 12px; }
+  .track-layout { grid-template-columns: 1fr; }
+  .how { grid-template-columns: 1fr; }
+  .room-form { flex-wrap: wrap; }
+  .room-form .green-btn { width: 100%; }
+}
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+  <a class="brand" href="#">
+    <span class="brandmark">W</span>
+    Wala Vibes
+  </a>
+
+  <button class="menu" id="menuBtn" aria-label="Open navigation">
+    ☰
+  </button>
+
+  <nav id="nav">
+    <a href="#playlists">🎧 Playlists</a>
+    <a href="#room">📱 Sync Room</a>
+    <a href="#player">▶ Player</a>
+    <a href="#how">How it works</a>
+  </nav>
+</header>
+
+<main>
+
+<div class="crumb">Home / Your mood, your music</div>
+
+<section class="hero">
+  <div>
+    <div class="eyebrow">YOUR MOOD. YOUR CREW. YOUR MUSIC.</div>
+
+    <h1>Every vibe.<br>Every phone. 🎶</h1>
+
+    <p>
+      From Diwali dance-floor bangers to late-night ghazals,
+      Punjabi energy and Talha Anjum bars. Pick a mood,
+      make a room, and bring your people into the same
+      listening session.
+    </p>
+
+    <button class="primary" onclick="document.getElementById('playlists').scrollIntoView({behavior:'smooth'})">
+      ▷ Explore playlists
+    </button>
+
+    <div class="stats">
+      MOOD-BASED MIXES · DESI ENERGY · LISTEN TOGETHER
+    </div>
+  </div>
+
+  <div class="hero-art">
+    <div class="art-sun"></div>
+    <div class="auto-illustration">🎧</div>
+    <div class="art-label">SOUNDTRACK YOUR SCENE</div>
+  </div>
+</section>
+
+<section class="room-panel" id="room">
+
+  <div class="room-visual">
+    <div class="emoji">📱 🎵 📱</div>
+    <h3>One room. Same vibe.</h3>
+    <p>
+      Create a room code and share it with your friends.
+      This version demonstrates the interface; real
+      synchronized playback requires a backend.
+    </p>
+  </div>
+
+  <div class="room-card">
+    <div class="small-label">LISTEN TOGETHER</div>
+    <h2>Join the crew</h2>
+
+    <p>
+      Start a room or enter your friend's room code.
+    </p>
+
+    <div class="room-form">
+      <input
+        id="roomCode"
+        maxlength="8"
+        placeholder="Enter room code"
+        aria-label="Room code"
+      >
+
+      <button class="green-btn" id="joinBtn">
+        Join room
+      </button>
+    </div>
+
+    <button class="primary" id="createBtn">
+      + Create a room
+    </button>
+
+    <div class="room-status" id="roomStatus" aria-live="polite"></div>
+  </div>
+
+</section>
+
+<section class="section" id="playlists">
+
+  <div class="eyebrow">PICK YOUR MOOD</div>
+  <h2>What are we playing?</h2>
+  <p>Four signature moods and more music for your day.</p>
+
+  <div class="mood-row" id="filters">
+    <button class="chip active" data-filter="all">All vibes</button>
+    <button class="chip" data-filter="party">Party</button>
+    <button class="chip" data-filter="calm">Chill & soulful</button>
+    <button class="chip" data-filter="desi">Desi energy</button>
+    <button class="chip" data-filter="rap">Rap</button>
+  </div>
+
+  <div class="playlist-grid">
+
+    <article class="playlist" data-mood="party desi" data-list="diwali">
+      <div class="cover diwali">
+        <span class="tag">FESTIVE · PARTY</span>
+        <span class="cover-emoji">🪔</span>
+      </div>
+      <div class="playlist-info">
+        <h3>Diwali Party</h3>
+        <p>Bollywood dance hits for the full celebration.</p>
+        <div class="playlist-foot">
+          <span class="track-count">BOLLYWOOD · PARTY</span>
+          <button class="play-btn" data-play="diwali" aria-label="Play Diwali Party">▶</button>
+        </div>
+      </div>
+    </article>
+
+    <article class="playlist" data-mood="calm" data-list="ghazal">
+      <div class="cover ghazal">
+        <span class="tag">LATE NIGHT</span>
+        <span class="cover-emoji">🌙</span>
+      </div>
+      <div class="playlist-info">
+        <h3>Ghazal</h3>
+        <p>Poetry, timeless voices and peaceful evenings.</p>
+        <div class="playlist-foot">
+          <span class="track-count">SOULFUL · CLASSIC</span>
+          <button class="play-btn" data-play="ghazal" aria-label="Play Ghazal">▶</button>
+        </div>
+      </div>
+    </article>
+
+    <article class="playlist" data-mood="party desi" data-list="punjabi">
+      <div class="cover punjabi">
+        <span class="tag">FULL POWER</span>
+        <span class="cover-emoji">🚜</span>
+      </div>
+      <div class="playlist-info">
+        <h3>Punjabi Vibe</h3>
+        <p>Big hooks, dhol energy and road-trip tracks.</p>
+        <div class="playlist-foot">
+          <span class="track-count">PUNJABI · HYPE</span>
+          <button class="play-btn" data-play="punjabi" aria-label="Play Punjabi Vibe">▶</button>
+        </div>
+      </div>
+    </article>
+
+    <article class="playlist" data-mood="rap" data-list="talha">
+      <div class="cover talha">
+        <span class="tag">AFTER DARK</span>
+        <span class="cover-emoji">🎤</span>
+      </div>
+      <div class="playlist-info">
+        <h3>Talha Anjum</h3>
+        <p>Moody Urdu rap and late-night hip-hop.</p>
+        <div class="playlist-foot">
+          <span class="track-count">URDU RAP · HIP-HOP</span>
+          <button class="play-btn" data-play="talha" aria-label="Play Talha Anjum">▶</button>
+        </div>
+      </div>
+    </article>
+
+    <article class="playlist" data-mood="calm" data-list="chill">
+      <div class="cover chill">
+        <span class="tag">SLOW DOWN</span>
+        <span class="cover-emoji">☁️</span>
+      </div>
+      <div class="playlist-info">
+        <h3>Chill Scene</h3>
+        <p>Easy listening for study sessions and sunsets.</p>
+        <div class="playlist-foot">
+          <span class="track-count">LO-FI · EASY</span>
+          <button class="play-btn" data-play="chill" aria-label="Play Chill Scene">▶</button>
+        </div>
+      </div>
+    </article>
+
+    <article class="playlist" data-mood="calm party" data-list="romance">
+      <div class="cover romance">
+        <span class="tag">SOFT HEART HOURS</span>
+        <span class="cover-emoji">💗</span>
+      </div>
+      <div class="playlist-info">
+        <h3>Romantic Hits</h3>
+        <p>Hindi love songs for your special moments.</p>
+        <div class="playlist-foot">
+          <span class="track-count">ROMANTIC · HINDI</span>
+          <button class="play-btn" data-play="romance" aria-label="Play Romantic Hits">▶</button>
+        </div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<section class="track-section" id="player">
+  <div class="track-layout">
+
+    <div class="now-playing">
+      <div>
+        <div class="small-label">YOUR SELECTED VIBE</div>
+        <div class="vinyl" id="playerEmoji">🪔</div>
+      </div>
+
+      <div>
+        <h3 id="nowTitle">Diwali Party</h3>
+        <p id="nowSubtitle">Festive Bollywood energy</p>
+      </div>
+
+      <button class="primary" id="openPlaylist">
+        Open playlist on YouTube ↗
+      </button>
+    </div>
+
+    <div class="track-list">
+      <div class="small-label">QUICK START</div>
+      <h3>Start with a classic</h3>
+      <div id="trackRows"></div>
+      <p style="font-size:12px;color:#705e4b;margin-top:14px">
+        Songs open on YouTube. This demo does not stream
+        or redistribute copyrighted music.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<section class="section" id="how">
+  <div class="eyebrow">MADE FOR YOUR CREW</div>
+  <h2>How it works</h2>
+
+  <div class="how">
+    <div class="step">
+      <div class="n">01</div>
+      <h3>Create your room</h3>
+      <p>Generate a short room code and share it with friends.</p>
+    </div>
+
+    <div class="step">
+      <div class="n">02</div>
+      <h3>Everyone joins</h3>
+      <p>Friends enter the same code. A production version
+      needs a realtime server to connect the devices.</p>
+    </div>
+
+    <div class="step">
+      <div class="n">03</div>
+      <h3>Listen together</h3>
+      <p>Shared playback requires a supported music player,
+      playback timestamps and synchronization logic.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="brand" style="color:#fff5df">
+    <span class="brandmark">W</span> Wala Vibes
+  </div>
+  <span>Made for every mood and every crew.</span>
+  <span>© <span id="year"></span> Wala Vibes</span>
+</footer>
+
+<div class="toast" id="toast" role="status"></div>
+<audio id="diwaliAudio" preload="auto"></audio>
+
+<script>
+const playlists = {
+  diwali: {
+    title: "Diwali Party",
+    subtitle: "Festive Bollywood energy",
+    emoji: "🪔",
+    adio: "WhatsApp",
+    tracks: [
+      ["Kala Chashma", "Baar Baar Dekho"],
+      ["Gallan Goodiyaan", "Dil Dhadakne Do"],
+      ["London Thumakda", "Queen"],
+      ["Badtameez Dil", "Yeh Jawaani Hai Deewani"]
+    ]
+  },
+
+  ghazal: {
+    title: "Ghazal",
+    subtitle: "Poetry for the quiet hours",
+    emoji: "🌙",
+    url: "https://www.youtube.com/results?search_query=best+ghazals+playlist",
+    tracks: [
+      ["Chupke Chupke Raat Din", "Ghulam Ali"],
+      ["Hoshwalon Ko Khabar Kya", "Jagjit Singh"],
+      ["Aaj Jaane Ki Zid Na Karo", "Farida Khanum"],
+      ["Hungama Hai Kyon Barpa", "Ghulam Ali"]
+    ]
+  },
+
+  punjabi: {
+    title: "Punjabi Vibe",
+    subtitle: "Dhol, bass and road-trip energy",
+    emoji: "🚜",
+    url: "https://www.youtube.com/results?search_query=Punjabi+hits+playlist",
+    tracks: [
+      ["Born To Shine", "Diljit Dosanjh"],
+      ["Lover", "Diljit Dosanjh"],
+      ["Insane", "AP Dhillon"],
+      ["GOAT", "Diljit Dosanjh"]
+    ]
+  },
+
+  talha: {
+    title: "Talha Anjum",
+    subtitle: "Urdu rap for after dark",
+    emoji: "🎤",
+    url: "https://www.youtube.com/results?search_query=Talha+Anjum+official+playlist",
+    tracks: [
+      ["Downers At Dusk", "Talha Anjum"],
+      ["Gumaan", "Young Stunners"],
+      ["Afsanay", "Young Stunners"],
+      ["Why", "Talha Anjum"]
+    ]
+  },
+
+  chill: {
+    title: "Chill Scene",
+    subtitle: "Slow down and breathe",
+    emoji: "☁️",
+    url: "https://www.youtube.com/results?search_query=chill+lofi+playlist",
+    tracks: [
+      ["Iktara", "Wake Up Sid"],
+      ["Kasoor", "Prateek Kuhad"],
+      ["Kho Gaye Hum Kahan", "Baar Baar Dekho"],
+      ["Alag Aasmaan", "Anuv Jain"]
+    ]
+  },
+
+  romance: {
+    title: "Romantic Hits",
+    subtitle: "Soft heart hours",
+    emoji: "💗",
+    url: "https://www.youtube.com/results?search_query=Hindi+romantic+songs+playlist",
+    tracks: [
+      ["Tum Se Hi", "Jab We Met"],
+      ["Raabta", "Agent Vinod"],
+      ["Apna Bana Le", "Bhediya"],
+      ["Pehla Nasha", "Jo Jeeta Wohi Sikandar"]
+    ]
+  }
+};
+
+const $ = selector => document.querySelector(selector);
+const diwaliAudioFile = "./WhatsApp%20Audio%202026-10-27%20at%201.29.39%20PM.mp4";
+
+let selectedPlaylist = "diwali";
+
+function showToast(message) {
+  const toast = $("#toast");
+
+  toast.textContent = message;
+  toast.classList.add("show");
+
+  clearTimeout(window.toastTimer);
+
+  window.toastTimer = setTimeout(() => {
+    toast.classList.remove("show");
+  }, 3000);
+}
+
+function renderPlaylist(key) {
+  selectedPlaylist = key;
+
+  const playlist = playlists[key];
+
+  $("#playerEmoji").textContent = playlist.emoji;
+  $("#nowTitle").textContent = playlist.title;
+  $("#nowSubtitle").textContent = playlist.subtitle;
+
+  $("#openPlaylist").onclick = () => {
+    window.open(playlist.url, "_blank", "noopener");
+  };
+
+  $("#trackRows").innerHTML = playlist.tracks.map((track, index) => {
+    const query = encodeURIComponent(track[0] + " " + track[1]);
+
+    return `
+      <div class="track">
+        <span class="track-num">
+          ${String(index + 1).padStart(2, "0")}
+        </span>
+
+        <div class="track-title">
+          ${track[0]}
+          <span class="track-artist">${track[1]}</span>
+        </div>
+
+        <a
+          href="https://www.youtube.com/results?search_query=${query}"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Listen ↗
+        </a>
+      </div>
+    `;
+  }).join("");
+}
+
+// Playlist selection
+document.querySelectorAll("[data-play]").forEach(button => {
+  button.addEventListener("click", () => {
+    const key = button.dataset.play;
+    const audio = $("#diwaliAudio");
+
+    renderPlaylist(key);
+
+    if (key === "diwali") {
+      audio.src = diwaliAudioFile;
+      audio.play().catch(() => {
+        showToast("Audio is ready — click again to start the Diwali track.");
+      });
+    } else {
+      audio.pause();
+      audio.currentTime = 0;
+    }
+
+    $("#player").scrollIntoView({
+      behavior: "smooth"
+    });
+
+    showToast(
+      playlists[key].title +
+      " selected. Choose a track to listen on YouTube."
+    );
+  });
+});
+
+// Mood filters
+$("#filters").addEventListener("click", event => {
+  const button = event.target.closest("[data-filter]");
+
+  if (!button) return;
+
+  document.querySelectorAll(".chip").forEach(chip => {
+    chip.classList.toggle("active", chip === button);
+  });
+
+  document.querySelectorAll(".playlist").forEach(card => {
+    const moods = card.dataset.mood.split(" ");
+
+    const matches =
+      button.dataset.filter === "all" ||
+      moods.includes(button.dataset.filter);
+
+    card.style.display = matches ? "" : "none";
+  });
+});
+
+// Demo room-code generator
+function generateRoomCode() {
+  return "WALA" +
+    Math.random().toString(36).slice(2, 6).toUpperCase();
+}
+
+$("#createBtn").addEventListener("click", () => {
+  const code = generateRoomCode();
+
+  $("#roomCode").value = code;
+
+  $("#roomStatus").textContent =
+    "Room code: " + code +
+    ". Demo only — not connected to a live server.";
+
+  showToast("Room code " + code + " is ready to share.");
+});
+
+// Demo room joining
+$("#joinBtn").addEventListener("click", () => {
+  const code = $("#roomCode").value.trim().toUpperCase();
+
+  if (!code) {
+    $("#roomStatus").textContent =
+      "Please enter a room code first.";
+    return;
+  }
+
+  $("#roomStatus").textContent =
+    "Join request for " + code +
+    ". Demo only — live rooms need a backend.";
+
+  showToast("Room joining is currently in demo mode.");
+});
+
+// Mobile navigation
+$("#menuBtn").addEventListener("click", () => {
+  $("#nav").classList.toggle("open");
+});
+
+document.querySelectorAll("nav a").forEach(link => {
+  link.addEventListener("click", () => {
+    $("#nav").classList.remove("open");
+  });
+});
+
+$("#year").textContent = new Date().getFullYear();
+
+renderPlaylist(selectedPlaylist);
+</script>
+
+</body>
+</html>
