@@ -1,0 +1,21 @@
+{
+  "rules": {
+    "rooms": {
+      "$roomCode": {
+        ".read": "auth != null && data.child('members').child(auth.uid).val() === true",
+        "members": {
+          "$uid": {
+            ".write": "auth != null && auth.uid === $uid && (!newData.exists() || newData.val() === true)",
+            ".validate": "newData.val() === true"
+          }
+        },
+        "devices": {
+          "$uid": {
+            ".write": "auth != null && auth.uid === $uid && root.child('rooms').child($roomCode).child('members').child(auth.uid).val() === true",
+            ".validate": "newData.hasChildren(['name', 'playlist', 'playing', 'joinedAt']) && newData.child('name').isString() && newData.child('name').val().length > 0 && newData.child('name').val().length <= 24 && newData.child('playing').isBoolean() && newData.child('joinedAt').isNumber() && (newData.child('playlist').val() === 'diwali' || newData.child('playlist').val() === 'ghazal' || newData.child('playlist').val() === 'punjabi' || newData.child('playlist').val() === 'talha' || newData.child('playlist').val() === 'chill' || newData.child('playlist').val() === 'romance')"
+          }
+        }
+      }
+    }
+  }
+}

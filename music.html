@@ -111,10 +111,7 @@ main {
 .hero {
   padding: 35px 5% 50px;
   display: grid;
-  grid-template-columns: 1.2fr .8fr;cd /d "D:\Bjaao"
-git branch -M main
-git remote add origin https://github.com/adityagoswami70/Bjaao.git
-git push -u origin main
+  grid-template-columns: 1.2fr .8fr;
   gap: 40px;
   align-items: center;
   background:
@@ -282,6 +279,20 @@ git push -u origin main
   border-radius: 12px;
 }
 
+.room-card > input {
+  width: 100%;
+  margin-top: 8px;
+  padding: 12px;
+  background: white;
+  border: 2px solid #d6c49e;
+  border-radius: 12px;
+}
+
+.room-card > .small-label {
+  display: block;
+  margin-top: 16px;
+}
+
 .green-btn {
   background: var(--green);
   color: white;
@@ -297,6 +308,37 @@ git push -u origin main
   font-weight: 700;
   margin-top: 12px;
   line-height: 1.5;
+}
+
+.room-help {
+  margin-top: 12px;
+  font-size: 12px;
+}
+
+.device-list {
+  display: grid;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.device-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: white;
+  border: 1px solid #d6c49e;
+  border-radius: 12px;
+  font-size: 13px;
+}
+
+.device-card small {
+  color: var(--muted);
+}
+
+.device-card strong {
+  overflow-wrap: anywhere;
 }
 
 .section {
@@ -488,6 +530,11 @@ git push -u origin main
 .now-playing p {
   color: #d9e7d5;
   line-height: 1.5;
+}
+
+.now-playing audio {
+  width: 100%;
+  margin-top: 14px;
 }
 
 .track-list {
@@ -714,11 +761,11 @@ footer span {
 
   <div class="room-visual">
     <div class="emoji">📱 🎵 📱</div>
-    <h3>One room. Same vibe.</h3>
+    <h3>One room. Your own vibe.</h3>
     <p>
-      Create a room code and share it with your friends.
-      This version demonstrates the interface; real
-      synchronized playback requires a backend.
+      Connect phones and computers with a room code.
+      Each device can pick and control its own music without
+      changing playback on anyone else's device.
     </p>
   </div>
 
@@ -727,8 +774,17 @@ footer span {
     <h2>Join the crew</h2>
 
     <p>
-      Start a room or enter your friend's room code.
+      Start a room or enter your friend's code. Your devices
+      connect through the configured realtime service.
     </p>
+
+    <label class="small-label" for="deviceName">THIS DEVICE</label>
+    <input
+      id="deviceName"
+      maxlength="24"
+      placeholder="Name this device (e.g. Maya's phone)"
+      aria-label="Device name"
+    >
 
     <div class="room-form">
       <input
@@ -736,6 +792,7 @@ footer span {
         maxlength="8"
         placeholder="Enter room code"
         aria-label="Room code"
+        autocomplete="off"
       >
 
       <button class="green-btn" id="joinBtn">
@@ -744,10 +801,16 @@ footer span {
     </div>
 
     <button class="primary" id="createBtn">
-      + Create a room
+      + Create and connect
     </button>
 
     <div class="room-status" id="roomStatus" aria-live="polite"></div>
+    <div class="device-list" id="deviceList" aria-live="polite"></div>
+    <button class="chip" id="leaveBtn" hidden>Leave room</button>
+    <p class="room-help">
+      Each device plays independently. Only the provided Diwali audio
+      plays directly here; other playlists open on YouTube.
+    </p>
   </div>
 
 </section>
@@ -873,6 +936,7 @@ footer span {
       <div>
         <h3 id="nowTitle">Diwali Party</h3>
         <p id="nowSubtitle">Festive Bollywood energy</p>
+        <audio id="diwaliAudio" controls preload="metadata" hidden></audio>
       </div>
 
       <button class="primary" id="openPlaylist">
@@ -907,15 +971,13 @@ footer span {
     <div class="step">
       <div class="n">02</div>
       <h3>Everyone joins</h3>
-      <p>Friends enter the same code. A production version
-      needs a realtime server to connect the devices.</p>
+      <p>Friends enter the same code to appear in the live device list.</p>
     </div>
 
     <div class="step">
       <div class="n">03</div>
       <h3>Listen together</h3>
-      <p>Shared playback requires a supported music player,
-      playback timestamps and synchronization logic.</p>
+      <p>Each device has its own playlist selection and playback controls.</p>
     </div>
   </div>
 </section>
@@ -931,15 +993,31 @@ footer span {
 </footer>
 
 <div class="toast" id="toast" role="status"></div>
-<audio id="diwaliAudio" preload="auto"></audio>
 
-<script>
+<script type="module">
+import { firebaseConfig } from "./firebase-config.js";
+import {
+  getApp,
+  getApps,
+  initializeApp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {
+  getDatabase,
+  onDisconnect,
+  onValue,
+  ref,
+  remove,
+  set,
+  update
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
 const playlists = {
   diwali: {
     title: "Diwali Party",
     subtitle: "Festive Bollywood energy",
     emoji: "🪔",
-    adio: "WhatsApp",
+    url: "https://www.youtube.com/results?search_query=Bollywood+Diwali+party+songs",
     tracks: [
       ["Kala Chashma", "Baar Baar Dekho"],
       ["Gallan Goodiyaan", "Dil Dhadakne Do"],
@@ -1018,6 +1096,21 @@ const $ = selector => document.querySelector(selector);
 const diwaliAudioFile = "./WhatsApp%20Audio%202026-10-27%20at%201.29.39%20PM.mp4";
 
 let selectedPlaylist = "diwali";
+let roomConnection = null;
+let devicesUnsubscribe = null;
+let database = null;
+let userId = null;
+
+const deviceNameInput = $("#deviceName");
+deviceNameInput.value = localStorage.getItem("walaDeviceName") || "";
+deviceNameInput.addEventListener("change", () => {
+  const name = deviceNameInput.value.trim().slice(0, 24);
+  deviceNameInput.value = name;
+  localStorage.setItem("walaDeviceName", name);
+  updateCurrentDevice({ name }).catch(error => {
+    showToast(`Could not update this device name: ${error.message}`);
+  });
+});
 
 function showToast(message) {
   const toast = $("#toast");
@@ -1071,6 +1164,150 @@ function renderPlaylist(key) {
   }).join("");
 }
 
+function updateCurrentDevice(fields) {
+  if (!roomConnection || !database || !userId) return Promise.resolve();
+  return update(
+    ref(database, `rooms/${roomConnection.code}/devices/${userId}`),
+    fields
+  );
+}
+
+function firebaseIsConfigured() {
+  return firebaseConfig.apiKey !== "YOUR_FIREBASE_API_KEY" &&
+    firebaseConfig.authDomain !== "YOUR_FIREBASE_PROJECT.firebaseapp.com" &&
+    firebaseConfig.projectId !== "YOUR_FIREBASE_PROJECT" &&
+    firebaseConfig.appId !== "YOUR_FIREBASE_APP_ID" &&
+    firebaseConfig.databaseURL.startsWith("https://") &&
+    !firebaseConfig.databaseURL.includes(".REGION.");
+}
+
+async function getFirebaseConnection() {
+  if (!firebaseIsConfigured()) {
+    throw new Error(
+      "Add your Firebase project settings in music.html and follow the setup steps in README.md."
+    );
+  }
+
+  const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const user = auth.currentUser || (await signInAnonymously(auth)).user;
+  database = getDatabase(app);
+  userId = user.uid;
+}
+
+function renderDevices(devices) {
+  const list = $("#deviceList");
+  list.replaceChildren();
+
+  const entries = Object.entries(devices || {});
+  if (!entries.length) {
+    list.textContent = "No other devices are connected yet.";
+    return;
+  }
+
+  entries.forEach(([id, device]) => {
+    const card = document.createElement("div");
+    card.className = "device-card";
+
+    const identity = document.createElement("div");
+    const name = document.createElement("strong");
+    name.textContent = device.name || "Unnamed device";
+    const detail = document.createElement("small");
+    const playlist = playlists[device.playlist];
+    detail.textContent = `${playlist ? playlist.title : "No playlist"} · ${device.playing ? "Playing" : "Not playing"}${id === userId ? " · This device" : ""}`;
+    identity.append(name, document.createElement("br"), detail);
+
+    const icon = document.createElement("span");
+    icon.textContent = id === userId ? "🎧" : "📱";
+    card.append(identity, icon);
+    list.append(card);
+  });
+}
+
+async function connectToRoom(code) {
+  const cleanCode = code.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 8);
+  if (!cleanCode) {
+    $("#roomStatus").textContent = "Enter a room code or create a room.";
+    return;
+  }
+
+  $("#roomStatus").textContent = "Connecting to the room…";
+  $("#deviceList").replaceChildren();
+
+  let memberRef;
+  let deviceRef;
+  try {
+    if (roomConnection) {
+      if (roomConnection.code === cleanCode) {
+        $("#roomStatus").textContent = `Already connected to room ${cleanCode}.`;
+        return;
+      }
+      await leaveCurrentRoom();
+    }
+
+    await getFirebaseConnection();
+    const roomRef = ref(database, `rooms/${cleanCode}`);
+    memberRef = ref(database, `rooms/${cleanCode}/members/${userId}`);
+    deviceRef = ref(database, `rooms/${cleanCode}/devices/${userId}`);
+
+    await set(memberRef, true);
+    await onDisconnect(memberRef).remove();
+
+    const name = deviceNameInput.value.trim() || `Device ${userId.slice(0, 4)}`;
+    deviceNameInput.value = name;
+    localStorage.setItem("walaDeviceName", name);
+    roomConnection = { code: cleanCode, deviceRef };
+    await onDisconnect(deviceRef).remove();
+    await set(deviceRef, {
+      name,
+      playlist: selectedPlaylist,
+      playing: !$("#diwaliAudio").paused,
+      joinedAt: Date.now()
+    });
+
+    if (devicesUnsubscribe) devicesUnsubscribe();
+    devicesUnsubscribe = onValue(ref(roomRef, "devices"), snapshot => {
+      renderDevices(snapshot.val());
+    }, error => {
+      $("#roomStatus").textContent = `Room updates stopped: ${error.message}`;
+    });
+
+    localStorage.setItem("walaRoomCode", cleanCode);
+    $("#roomCode").value = cleanCode;
+    $("#roomStatus").textContent = `Connected to room ${cleanCode}. Each device controls its own playback.`;
+    $("#leaveBtn").hidden = false;
+    showToast(`Connected to room ${cleanCode}.`);
+  } catch (error) {
+    roomConnection = null;
+    if (deviceRef) {
+      await remove(deviceRef).catch(cleanupError => {
+        console.error("Could not clean up the failed device connection:", cleanupError);
+      });
+    }
+    if (memberRef && database) {
+      await remove(memberRef).catch(cleanupError => {
+        console.error("Could not clean up the failed room join:", cleanupError);
+      });
+    }
+    $("#leaveBtn").hidden = true;
+    $("#deviceList").replaceChildren();
+    $("#roomStatus").textContent = error.message || "Could not connect to the room.";
+    showToast("Room connection failed. Check the Firebase setup and try again.");
+  }
+}
+
+async function leaveCurrentRoom() {
+  if (!roomConnection || !database || !userId) return;
+  if (devicesUnsubscribe) devicesUnsubscribe();
+  await remove(roomConnection.deviceRef);
+  await remove(ref(database, `rooms/${roomConnection.code}/members/${userId}`));
+  roomConnection = null;
+  devicesUnsubscribe = null;
+  localStorage.removeItem("walaRoomCode");
+  $("#deviceList").replaceChildren();
+  $("#leaveBtn").hidden = true;
+}
+
 // Playlist selection
 document.querySelectorAll("[data-play]").forEach(button => {
   button.addEventListener("click", () => {
@@ -1078,25 +1315,29 @@ document.querySelectorAll("[data-play]").forEach(button => {
     const audio = $("#diwaliAudio");
 
     renderPlaylist(key);
+    updateCurrentDevice({ playlist: key }).catch(error => {
+      showToast(`Could not update this device in the room: ${error.message}`);
+    });
 
     if (key === "diwali") {
       audio.src = diwaliAudioFile;
+      audio.hidden = false;
       audio.play().catch(() => {
         showToast("Audio is ready — click again to start the Diwali track.");
       });
     } else {
       audio.pause();
       audio.currentTime = 0;
+      audio.hidden = true;
     }
 
     $("#player").scrollIntoView({
       behavior: "smooth"
     });
 
-    showToast(
-      playlists[key].title +
-      " selected. Choose a track to listen on YouTube."
-    );
+    showToast(key === "diwali"
+      ? "Playing the supplied Diwali audio on this device."
+      : `${playlists[key].title} selected. Open a track on YouTube on this device.`);
   });
 });
 
@@ -1121,39 +1362,52 @@ $("#filters").addEventListener("click", event => {
   });
 });
 
-// Demo room-code generator
 function generateRoomCode() {
-  return "WALA" +
-    Math.random().toString(36).slice(2, 6).toUpperCase();
+  const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  const randomBytes = crypto.getRandomValues(new Uint8Array(8));
+  return Array.from(randomBytes, byte => alphabet[byte % alphabet.length]).join("");
 }
 
 $("#createBtn").addEventListener("click", () => {
-  const code = generateRoomCode();
-
+  const code = generateRoomCode().slice(0, 8);
   $("#roomCode").value = code;
-
-  $("#roomStatus").textContent =
-    "Room code: " + code +
-    ". Demo only — not connected to a live server.";
-
-  showToast("Room code " + code + " is ready to share.");
+  connectToRoom(code);
 });
 
-// Demo room joining
 $("#joinBtn").addEventListener("click", () => {
-  const code = $("#roomCode").value.trim().toUpperCase();
+  connectToRoom($("#roomCode").value);
+});
 
-  if (!code) {
-    $("#roomStatus").textContent =
-      "Please enter a room code first.";
-    return;
+$("#roomCode").addEventListener("keydown", event => {
+  if (event.key === "Enter") connectToRoom($("#roomCode").value);
+});
+
+$("#leaveBtn").addEventListener("click", async () => {
+  if (!roomConnection || !database || !userId) return;
+
+  try {
+    await leaveCurrentRoom();
+    localStorage.removeItem("walaRoomCode");
+    $("#deviceList").replaceChildren();
+    $("#roomStatus").textContent = "You left the room.";
+    $("#leaveBtn").hidden = true;
+  } catch (error) {
+    $("#roomStatus").textContent = `Could not leave the room: ${error.message}`;
   }
+});
 
-  $("#roomStatus").textContent =
-    "Join request for " + code +
-    ". Demo only — live rooms need a backend.";
+$("#diwaliAudio").addEventListener("play", () => {
+  updateCurrentDevice({ playing: true }).catch(error => {
+    showToast(`Could not update playback status: ${error.message}`);
+  });
+});
 
-  showToast("Room joining is currently in demo mode.");
+["pause", "ended"].forEach(eventName => {
+  $("#diwaliAudio").addEventListener(eventName, () => {
+    updateCurrentDevice({ playing: false }).catch(error => {
+      showToast(`Could not update playback status: ${error.message}`);
+    });
+  });
 });
 
 // Mobile navigation
@@ -1170,6 +1424,12 @@ document.querySelectorAll("nav a").forEach(link => {
 $("#year").textContent = new Date().getFullYear();
 
 renderPlaylist(selectedPlaylist);
+
+const previousRoomCode = localStorage.getItem("walaRoomCode");
+if (previousRoomCode && firebaseIsConfigured()) {
+  $("#roomCode").value = previousRoomCode;
+  connectToRoom(previousRoomCode);
+}
 </script>
 
 </body>
